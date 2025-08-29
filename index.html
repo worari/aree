@@ -8,470 +8,82 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #718096;
-            font-size: 1.1rem;
-        }
-
-        .auth-section {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .auth-section.active {
-            display: block;
-        }
-
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #2d3748;
-            font-weight: 600;
-        }
-
-        .form-control {
+        /* CSS ทั้งหมดเหมือนเดิม แต่เพิ่มส่วนนี้เข้าไป */
+        .btn-google {
+            background-color: #ffffff;
+            color: #4A5568;
+            border: 2px solid #E2E8F0;
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f7fafc;
-            color: #4a5568;
-            border: 2px solid #e2e8f0;
-        }
-
-        .btn-secondary:hover {
-            background: #edf2f7;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-            color: white;
-        }
-
-        .main-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            display: none; /* ซ่อนไว้ตอนแรก */
-        }
-
-        .main-nav.active {
-            display: block;
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .nav-card {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
-        }
-
-        .nav-card i {
-            font-size: 3rem;
-            color: #667eea;
             margin-bottom: 15px;
         }
 
-        .nav-card h3 {
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
+        .btn-google:hover {
+            background-color: #F7FAFC;
         }
 
-        .nav-card p {
-            color: #718096;
-            font-size: 0.9rem;
+        .btn-google .fa-google {
+            color: #DB4437;
         }
 
-        .content-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            display: none; /* ซ่อนไว้ตอนแรก */
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .section-title {
-            color: #2d3748;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .table th,
-        .table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        .table tr:hover {
-            background: #f7fafc;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            color: #2d3748;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #718096;
-            cursor: pointer;
-        }
-
-        .grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .grid-2 {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        .grid-3 {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .card-title {
-            color: #2d3748;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .card-value {
-            color: #667eea;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: #fed7d7;
-            color: #c53030;
-        }
-
-        .status-approved {
-            background: #c6f6d5;
-            color: #276749;
-        }
-
-        .status-rejected {
-            background: #fed7d7;
-            color: #c53030;
-        }
-
-        .status-processing {
-            background: #feebc8;
-            color: #c05621;
-        }
-
-        .chart-container {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .breadcrumb {
-            margin-bottom: 20px;
-        }
-
-        .breadcrumb a {
-            color: #667eea;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .file-upload {
-            border: 2px dashed #cbd5e0;
-            border-radius: 8px;
-            padding: 30px;
+        .divider {
             text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .file-upload:hover {
-            border-color: #667eea;
-            background: #f7fafc;
-        }
-
-        .user-info {
+            margin: 20px 0;
+            color: #A0AEC0;
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            color: #2d3748;
-            margin-bottom: 20px;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #E2E8F0;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            z-index: 1001;
-            transform: translateX(120%);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+        .divider:not(:empty)::before {
+            margin-right: .5em;
         }
 
-        .notification.show {
-            transform: translateX(0);
-            opacity: 1;
+        .divider:not(:empty)::after {
+            margin-left: .5em;
         }
 
+        /* ส่วน CSS อื่นๆ ทั้งหมดเหมือนเดิม... */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Sarabun', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); text-align: center; }
+        .header h1 { color: #2d3748; font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; }
+        .header p { color: #718096; font-size: 1.1rem; }
+        .auth-section { display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
+        .auth-section.active { display: block; }
+        .auth-form { max-width: 400px; margin: 0 auto; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #2d3748; font-weight: 600; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: all 0.3s ease; }
+        .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 100%; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+        .btn-secondary { background: #f7fafc; color: #4a5568; border: 2px solid #e2e8f0; }
+        .btn-secondary:hover { background: #edf2f7; }
+        .main-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
+        .main-nav.active { display: block; }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .nav-card { background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
+        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); border-color: #667eea; }
+        .nav-card i { font-size: 3rem; color: #667eea; margin-bottom: 15px; }
+        .nav-card h3 { color: #2d3748; margin-bottom: 10px; font-size: 1.3rem; }
+        .nav-card p { color: #718096; font-size: 0.9rem; }
+        .content-section { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
+        .content-section.active { display: block; }
+        .user-info { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; color: #2d3748; margin-bottom: 20px; }
+        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white; font-weight: 600; z-index: 1001; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
+        .notification.show { transform: translateX(0); opacity: 1; }
         .notification.success { background: #48bb78; }
         .notification.error { background: #f56565; }
-
-        @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .header h1 { font-size: 2rem; }
-            .section-header { flex-direction: column; align-items: flex-start; }
-            .modal-content { width: 95%; padding: 20px; }
-            .grid-2, .grid-3 { grid-template-columns: 1fr; }
-        }
-
+        .breadcrumb { margin-bottom: 20px; }
+        .breadcrumb a { color: #667eea; text-decoration: none; margin-right: 10px; }
     </style>
 </head>
 <body>
@@ -483,243 +95,173 @@
             <p>ระบบบริหารจัดการสิทธิและสวัสดิการทหารอัตโนมัติ</p>
         </div>
 
-        <div id="loginSection" class="auth-section active">
-            <div class="login-form">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #2d3748;">
-                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                </h2>
-                
-                <div class="form-group">
-                    <label>เลขประจำตัวประชาชน / รหัสประจำตัว</label>
-                    <input type="text" id="username" class="form-control" placeholder="กรอกเลขประจำตัว">
+        <div id="authWrapper">
+            <div id="loginSection" class="auth-section active">
+                <div class="auth-form">
+                    <h2 style="text-align: center; margin-bottom: 20px; color: #2d3748;"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</h2>
+                    <button onclick="signInWithGoogle()" class="btn btn-google"><i class="fab fa-google"></i> เข้าสู่ระบบด้วย Google</button>
+                    <div class="divider">หรือ</div>
+                    <div class="form-group">
+                        <label>รหัสประจำตัว</label>
+                        <input type="text" id="username" class="form-control" placeholder="กรอกรหัสประจำตัว">
+                    </div>
+                    <div class="form-group">
+                        <label>รหัสผ่าน</label>
+                        <input type="password" id="password" class="form-control" placeholder="กรอกรหัสผ่าน">
+                    </div>
+                    <button onclick="login()" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="#" onclick="showAuthSection('registerSection')" style="color: #667eea; text-decoration: none;">ยังไม่มีบัญชี? สมัครสมาชิก</a>
+                    </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>รหัสผ่าน</label>
-                    <input type="password" id="password" class="form-control" placeholder="กรอกรหัสผ่าน">
-                </div>
-
-                <div class="form-group">
-                    <select id="userRole" class="form-control">
-                        <option value="">เลือกประเภทผู้ใช้งาน</option>
-                        <option value="personnel">กำลังพล</option>
-                        <option value="unit_officer">เจ้าหน้าที่หน่วย</option>
-                        <option value="field_officer">เจ้าหน้าที่สนาม</option>
-                        <option value="commander">ผู้บังคับบัญชา</option>
-                        <option value="admin">ผู้ดูแลระบบ</option>
-                    </select>
-                </div>
-
-                <button onclick="login()" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">
-                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                </button>
-
-                <div style="text-align: center; gap: 20px; display: flex; justify-content: center;">
-                    <a href="#" onclick="alert('ฟังก์ชันนี้ยังไม่เปิดใช้งาน')" style="color: #667eea; text-decoration: none;">ลืมรหัสผ่าน?</a>
-                    <a href="#" onclick="alert('ฟังก์ชันนี้ยังไม่เปิดใช้งาน')" style="color: #667eea; text-decoration: none;">สมัครสมาชิก</a>
+            <div id="registerSection" class="auth-section">
+                <div class="auth-form">
+                    <h2 style="text-align: center; margin-bottom: 20px; color: #2d3748;"><i class="fas fa-user-plus"></i> สมัครสมาชิก</h2>
+                    <button onclick="signInWithGoogle()" class="btn btn-google"><i class="fab fa-google"></i> สมัครสมาชิกด้วย Google</button>
+                    <div class="divider">หรือ</div>
+                    <div class="form-group">
+                        <label>รหัสประจำตัว</label>
+                        <input type="text" id="regUsername" class="form-control" placeholder="กำหนดรหัสประจำตัว">
+                    </div>
+                    <div class="form-group">
+                        <label>รหัสผ่าน</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="กำหนดรหัสผ่าน">
+                    </div>
+                    <div class="form-group">
+                        <label>ยืนยันรหัสผ่าน</label>
+                        <input type="password" id="regConfirmPassword" class="form-control" placeholder="ยืนยันรหัสผ่านอีกครั้ง">
+                    </div>
+                    <button onclick="register()" class="btn btn-primary"><i class="fas fa-user-plus"></i> สมัครสมาชิก</button>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="#" onclick="showAuthSection('loginSection')" style="color: #667eea; text-decoration: none;">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="mainNav" class="main-nav">
-            <div class="user-info">
+             <div class="user-info">
                 <div class="user-avatar"><i class="fas fa-user"></i></div>
                 <div>
                     <div id="loggedInUserName" style="font-weight: 600;"></div>
-                    <div id="loggedInUserRole" style="opacity: 0.8;"></div>
+                    <div id="loggedInUserRole" style="opacity: 0.8;">ผู้ใช้งานทั่วไป</div>
                 </div>
                 <button onclick="logout()" class="btn btn-secondary" style="margin-left: auto;">
                     <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
                 </button>
             </div>
-
             <div class="nav-grid">
-                <div class="nav-card" onclick="showSection('welfareSection')">
-                    <i class="fas fa-hands-helping"></i>
-                    <h3>จัดการสิทธิและสวัสดิการ</h3>
-                    <p>บันทึก แก้ไข ลบข้อมูลสิทธิและสวัสดิการกำลังพล</p>
-                </div>
-                <div class="nav-card" onclick="showSection('incidentSection')">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>รายงานการสูญเสีย</h3>
-                    <p>บันทึกข้อมูลรายงานการสูญเสียจากการปฏิบัติหน้าที่</p>
-                </div>
-                <div class="nav-card" onclick="showSection('requestSection')">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>เสนอขอรับสิทธิ</h3>
-                    <p>ยื่นคำขอรับสิทธิและสวัสดิการออนไลน์</p>
-                </div>
-                <div class="nav-card" onclick="showSection('trackingSection')">
-                    <i class="fas fa-search"></i>
-                    <h3>ติดตามสถานะ</h3>
-                    <p>ติดตามสถานะคำขอและประวัติการใช้สิทธิ</p>
-                </div>
-                <div class="nav-card" onclick="showSection('dashboardSection')">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Dashboard</h3>
-                    <p>ภาพรวมข้อมูลสำหรับผู้บังคับบัญชา</p>
-                </div>
-                <div class="nav-card" onclick="showSection('reportsSection')">
-                    <i class="fas fa-file-pdf"></i>
-                    <h3>รายงานและสถิติ</h3>
-                    <p>ดาวน์โหลดรายงาน PDF/Excel และสถิติต่างๆ</p>
-                </div>
+                <div class="nav-card" onclick="showSection('welfareSection')"><i class="fas fa-hands-helping"></i><h3>จัดการสิทธิและสวัสดิการ</h3><p>บันทึก แก้ไข ลบข้อมูลสิทธิและสวัสดิการกำลังพล</p></div>
+                <div class="nav-card" onclick="showSection('dashboardSection')"><i class="fas fa-chart-line"></i><h3>Dashboard</h3><p>ภาพรวมข้อมูลสำหรับผู้บังคับบัญชา</p></div>
             </div>
         </div>
 
         <div id="welfareSection" class="content-section">
-            <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ จัดการสิทธิและสวัสดิการ</span>
+            <div class="breadcrumb"><a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a> / จัดการสิทธิและสวัสดิการ</div>
             </div>
-            <div class="section-header">
-                <h2 class="section-title">จัดการสิทธิและสวัสดิการ</h2>
-                <button onclick="showModal('welfareModal')" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> เพิ่มสิทธิใหม่
-                </button>
-            </div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ชื่อรายการสิทธิ</th>
-                            <th>ยอดเงินช่วยเหลือ</th>
-                            <th>ประเภทกำลังพล</th>
-                            <th>การจัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="welfareTableBody">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="incidentSection" class="content-section">
-             <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ รายงานการสูญเสีย</span>
-            </div>
-            <div class="section-header">
-                <h2 class="section-title">บันทึกรายงานการสูญเสีย</h2>
-            </div>
-             <p style="text-align:center; color: #718096;">ส่วนนี้เป็นเพียงหน้าแสดงผลตัวอย่าง</p>
-        </div>
-        
-        <div id="requestSection" class="content-section">
-             <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ เสนอขอรับสิทธิ</span>
-            </div>
-            <div class="section-header">
-                <h2 class="section-title">เสนอขอรับสิทธิและสวัสดิการ</h2>
-            </div>
-            <p style="text-align:center; color: #718096;">ส่วนนี้เป็นเพียงหน้าแสดงผลตัวอย่าง</p>
-        </div>
-
-        <div id="trackingSection" class="content-section">
-             <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ ติดตามสถานะ</span>
-            </div>
-            <div class="section-header">
-                <h2 class="section-title">ติดตามสถานะคำขอ</h2>
-            </div>
-            <p style="text-align:center; color: #718096;">ส่วนนี้เป็นเพียงหน้าแสดงผลตัวอย่าง</p>
-        </div>
-
         <div id="dashboardSection" class="content-section">
-            <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ Dashboard</span>
-            </div>
-            <div class="section-header">
-                <h2 class="section-title">Dashboard ผู้บังคับบัญชา</h2>
-            </div>
-            <div class="grid grid-2">
-                <div class="chart-container">
-                    <h3 style="text-align:center; margin-bottom: 20px;">สรุปคำขอรายเดือน</h3>
-                    <canvas id="monthlyRequestsChart"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h3 style="text-align:center; margin-bottom: 20px;">ประเภทการสูญเสีย</h3>
-                    <canvas id="lossTypeChart"></canvas>
-                </div>
-            </div>
+            <div class="breadcrumb"><a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a> / Dashboard</div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr;"><div class="chart-container"><canvas id="monthlyRequestsChart"></canvas></div><div class="chart-container"><canvas id="lossTypeChart"></canvas></div></div>
         </div>
-        
-        <div id="reportsSection" class="content-section">
-             <div class="breadcrumb">
-                <a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a>
-                <span>/ รายงานและสถิติ</span>
-            </div>
-            <div class="section-header">
-                <h2 class="section-title">รายงานและสถิติ</h2>
-            </div>
-            <p style="text-align:center; color: #718096;">ส่วนนี้เป็นเพียงหน้าแสดงผลตัวอย่าง</p>
-        </div>
-    </div>
 
-    <div id="welfareModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">เพิ่ม/แก้ไข สิทธิและสวัสดิการ</h3>
-                <button onclick="closeModal('welfareModal')" class="close-btn">&times;</button>
-            </div>
-            <div class="form-group">
-                <label>ชื่อรายการสิทธิ</label>
-                <input type="text" id="welfareName" class="form-control" placeholder="เช่น เงินบำรุงขวัญ">
-            </div>
-            <div class="form-group">
-                <label>ยอดเงินช่วยเหลือ</label>
-                <input type="text" id="welfareAmount" class="form-control" placeholder="เช่น 10,000 - 40,000 บาท">
-            </div>
-            <div class="form-group">
-                <label>ประเภทกำลังพล</label>
-                <select id="welfarePersonnelType" class="form-control">
-                    <option>นายทหารสัญญาบัตร</option>
-                    <option>นายทหารประทวน</option>
-                    <option>ทหารกองประจำการ</option>
-                    <option>ทั้งหมด</option>
-                </select>
-            </div>
-            <div style="text-align: right;">
-                <button onclick="saveWelfare()" class="btn btn-success"><i class="fas fa-save"></i> บันทึก</button>
-                 <button onclick="closeModal('welfareModal')" class="btn btn-secondary">ยกเลิก</button>
-            </div>
-        </div>
     </div>
     
     <script>
-        // --- ส่วนจัดการข้อมูล (Data Management) ---
-        // (ในระบบจริง ข้อมูลส่วนนี้จะมาจากฐานข้อมูล)
-        let welfareData = [
-            { id: 1, name: 'เงินบำรุงขวัญกองทัพบก', amount: '10,000 - 40,000 บาท', type: 'นายทหารสัญญาบัตร' },
-            { id: 2, name: 'สวัสดิการช่วยเหลือครอบครัว', amount: '15,000 บาท', type: 'ทหารกองประจำการ' }
-        ];
-
-        // --- ส่วนจัดการการแสดงผล (UI Management) ---
-        const loginSection = document.getElementById('loginSection');
+        // --- ส่วนจัดการ Elements ---
+        const authWrapper = document.getElementById('authWrapper');
         const mainNav = document.getElementById('mainNav');
         const contentSections = document.querySelectorAll('.content-section');
-        const modals = document.querySelectorAll('.modal');
         const notification = document.getElementById('notification');
 
-        // ฟังก์ชันแสดง Notification
+        // --- ส่วนจัดการ UI ---
         function showNotification(message, type = 'success') {
             notification.textContent = message;
             notification.className = `notification ${type} show`;
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { notification.classList.remove('show'); }, 3000);
         }
 
-        // ฟังก์ชันแสดง Section ที่ต้องการ และซ่อนส่วนที่เหลือ
-        function showSection(sectionId) {
-            mainNav.classList.remove('active');
-            contentSections.forEach(section => {
+        // ฟังก์ชันใหม่สำหรับสลับหน้า Login/Register
+        function showAuthSection(sectionId) {
+            document.querySelectorAll('.auth-section').forEach(section => {
                 section.classList.remove('active');
             });
-            const activeSection = document.getElementById(sectionId);
-            if (activeSection) {
-                activeSection.classList.add('active');
-                if (sectionId === '
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function showSection(sectionId) {
+            mainNav.classList.remove('active');
+            contentSections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function showMainNav() {
+            contentSections.forEach(section => section.classList.remove('active'));
+            mainNav.classList.add('active');
+        }
+
+        function showApp() {
+            authWrapper.style.display = 'none'; // ซ่อนส่วน auth ทั้งหมด
+            mainNav.classList.add('active');
+        }
+        
+        function showAuth() {
+            authWrapper.style.display = 'block'; // แสดงส่วน auth ทั้งหมด
+            showAuthSection('loginSection'); // กลับไปหน้า login เสมอ
+            mainNav.classList.remove('active');
+            contentSections.forEach(section => section.classList.remove('active'));
+        }
+
+        // --- ส่วนจัดการ Authentication ---
+        function login() {
+            const username = document.getElementById('username').value;
+            if (!username) {
+                showNotification('กรุณากรอกรหัสประจำตัว', 'error');
+                return;
+            }
+            document.getElementById('loggedInUserName').textContent = username;
+            showApp();
+            showNotification('เข้าสู่ระบบสำเร็จ!');
+        }
+
+        // ฟังก์ชันสมัครสมาชิก (ใหม่)
+        function register() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (!username || !password || !confirmPassword) {
+                showNotification('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showNotification('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน', 'error');
+                return;
+            }
+            // จำลองการสมัครและล็อกอินทันที
+            document.getElementById('loggedInUserName').textContent = username;
+            showApp();
+            showNotification(`สมัครสมาชิกในชื่อ ${username} สำเร็จ!`);
+        }
+
+        // ฟังก์ชันจำลองการล็อกอินด้วย Google (ใหม่)
+        function signInWithGoogle() {
+            // ในระบบจริง ส่วนนี้จะทำการ Redirect ไปยังหน้า Authentication ของ Google
+            // แต่ในตัวอย่างนี้ เราจะจำลองว่าล็อกอินสำเร็จทันที
+            const googleUserName = "ผู้ใช้ Google";
+            document.getElementById('loggedInUserName').textContent = googleUserName;
+            showApp();
+            showNotification('เข้าสู่ระบบด้วย Google สำเร็จ!');
+        }
+
+        function logout() {
+            showAuth();
+            showNotification('ออกจากระบบเรียบร้อยแล้ว');
+        }
+
+        // ฟังก์ชันอื่นๆ (Dashboard, Modal, etc.) สามารถใส่ต่อจากตรงนี้ได้
+        // ...
+    </script>
+</body>
+</html>

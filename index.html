@@ -3,265 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบริหารจัดการสิทธิและสวัสดิการกำลังพล</title>
+    <title>ระบบจัดการสิทธิและสวัสดิการกำลังพล</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* CSS ทั้งหมดเหมือนเดิม แต่เพิ่มส่วนนี้เข้าไป */
-        .btn-google {
-            background-color: #ffffff;
-            color: #4A5568;
-            border: 2px solid #E2E8F0;
-            width: 100%;
-            margin-bottom: 15px;
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --bg-light: #f7fafc;
+            --border-color: #e2e8f0;
         }
-
-        .btn-google:hover {
-            background-color: #F7FAFC;
-        }
-
-        .btn-google .fa-google {
-            color: #DB4437;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            color: #A0AEC0;
-            display: flex;
-            align-items: center;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .divider:not(:empty)::before {
-            margin-right: .5em;
-        }
-
-        .divider:not(:empty)::after {
-            margin-left: .5em;
-        }
-
-        /* ส่วน CSS อื่นๆ ทั้งหมดเหมือนเดิม... */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Sarabun', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        body { font-family: 'Sarabun', sans-serif; background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); text-align: center; }
-        .header h1 { color: #2d3748; font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; }
-        .header p { color: #718096; font-size: 1.1rem; }
+        .header h1 { color: var(--text-dark); font-size: 2.5rem; }
         .auth-section { display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
         .auth-section.active { display: block; }
         .auth-form { max-width: 400px; margin: 0 auto; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #2d3748; font-weight: 600; }
-        .form-control { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: all 0.3s ease; }
-        .form-control:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 600; }
+        .form-control { width: 100%; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; }
         .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 100%; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); color: white; width: 100%; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
-        .btn-secondary { background: #f7fafc; color: #4a5568; border: 2px solid #e2e8f0; }
-        .btn-secondary:hover { background: #edf2f7; }
+        .btn-success { background-color: #48BB78; color: white; }
         .main-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
         .main-nav.active { display: block; }
         .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .nav-card { background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
-        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); border-color: #667eea; }
-        .nav-card i { font-size: 3rem; color: #667eea; margin-bottom: 15px; }
-        .nav-card h3 { color: #2d3748; margin-bottom: 10px; font-size: 1.3rem; }
-        .nav-card p { color: #718096; font-size: 0.9rem; }
+        .nav-card { background: linear-gradient(135deg, var(--bg-light) 0%, #edf2f7 100%); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
+        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); border-color: var(--primary-start); }
+        .nav-card i { font-size: 3rem; color: var(--primary-start); margin-bottom: 15px; }
+        .nav-card h3 { color: var(--text-dark); margin-bottom: 10px; font-size: 1.3rem; }
+        .nav-card p { color: var(--text-light); font-size: 0.9rem; }
         .content-section { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
         .content-section.active { display: block; }
-        .user-info { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; color: #2d3748; margin-bottom: 20px; }
-        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+        .user-info { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; color: var(--text-dark); margin-bottom: 20px; }
+        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
         .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white; font-weight: 600; z-index: 1001; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
         .notification.show { transform: translateX(0); opacity: 1; }
         .notification.success { background: #48bb78; }
         .notification.error { background: #f56565; }
-        .breadcrumb { margin-bottom: 20px; }
-        .breadcrumb a { color: #667eea; text-decoration: none; margin-right: 10px; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .table th { background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); color: white; }
+        .role-select { padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
     <div id="notification" class="notification"></div>
 
     <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-shield-alt"></i> ระบบจัดการสิทธิและสวัสดิการกำลังพล</h1>
-            <p>ระบบบริหารจัดการสิทธิและสวัสดิการ</p>
-        </div>
+        <div class="header"><h1><i class="fas fa-shield-alt"></i> ระบบจัดการสิทธิและสวัสดิการกำลังพล</h1></div>
 
         <div id="authWrapper">
             <div id="loginSection" class="auth-section active">
                 <div class="auth-form">
-                    <h2 style="text-align: center; margin-bottom: 20px; color: #2d3748;"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</h2>
-                    <button onclick="signInWithGoogle()" class="btn btn-google"><i class="fab fa-google"></i> เข้าสู่ระบบด้วย Google</button>
-                    <div class="divider">หรือ</div>
+                    <h2 style="text-align: center; margin-bottom: 20px; color: var(--text-dark);"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</h2>
                     <div class="form-group">
-                        <label>รหัสประจำตัว</label>
-                        <input type="text" id="username" class="form-control" placeholder="กรอกรหัสประจำตัว">
+                        <label>ชื่อผู้ใช้ (ทดสอบ: admin, approver, auditor, user01)</label>
+                        <input type="text" id="username" class="form-control" placeholder="กรอกชื่อผู้ใช้">
                     </div>
                     <div class="form-group">
                         <label>รหัสผ่าน</label>
-                        <input type="password" id="password" class="form-control" placeholder="กรอกรหัสผ่าน">
+                        <input type="password" id="password" class="form-control" value="1234">
                     </div>
                     <button onclick="login()" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <a href="#" onclick="showAuthSection('registerSection')" style="color: #667eea; text-decoration: none;">ยังไม่มีบัญชี? สมัครสมาชิก</a>
-                    </div>
-                </div>
-            </div>
-
-            <div id="registerSection" class="auth-section">
-                <div class="auth-form">
-                    <h2 style="text-align: center; margin-bottom: 20px; color: #2d3748;"><i class="fas fa-user-plus"></i> สมัครสมาชิก</h2>
-                    <button onclick="signInWithGoogle()" class="btn btn-google"><i class="fab fa-google"></i> สมัครสมาชิกด้วย Google</button>
-                    <div class="divider">หรือ</div>
-                    <div class="form-group">
-                        <label>รหัสประจำตัว</label>
-                        <input type="text" id="regUsername" class="form-control" placeholder="กำหนดรหัสประจำตัว">
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน</label>
-                        <input type="password" id="regPassword" class="form-control" placeholder="กำหนดรหัสผ่าน">
-                    </div>
-                    <div class="form-group">
-                        <label>ยืนยันรหัสผ่าน</label>
-                        <input type="password" id="regConfirmPassword" class="form-control" placeholder="ยืนยันรหัสผ่านอีกครั้ง">
-                    </div>
-                    <button onclick="register()" class="btn btn-primary"><i class="fas fa-user-plus"></i> สมัครสมาชิก</button>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <a href="#" onclick="showAuthSection('loginSection')" style="color: #667eea; text-decoration: none;">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</a>
-                    </div>
                 </div>
             </div>
         </div>
 
         <div id="mainNav" class="main-nav">
-             <div class="user-info">
-                <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+                <div class="user-avatar"><i class="fas fa-user-shield"></i></div>
                 <div>
                     <div id="loggedInUserName" style="font-weight: 600;"></div>
-                    <div id="loggedInUserRole" style="opacity: 0.8;">ผู้ใช้งานทั่วไป</div>
+                    <div id="loggedInUserRole" style="opacity: 0.8; font-size: 0.9rem;"></div>
                 </div>
-                <button onclick="logout()" class="btn btn-secondary" style="margin-left: auto;">
-                    <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-                </button>
+                <button onclick="logout()" class="btn" style="margin-left: auto; background: #fff; border: 1px solid var(--border-color);"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
             </div>
-            <div class="nav-grid">
-                <div class="nav-card" onclick="showSection('welfareSection')"><i class="fas fa-hands-helping"></i><h3>จัดการสิทธิและสวัสดิการ</h3><p>บันทึก แก้ไข ลบข้อมูลสิทธิและสวัสดิการกำลังพล</p></div>
-                <div class="nav-card" onclick="showSection('dashboardSection')"><i class="fas fa-chart-line"></i><h3>Dashboard</h3><p>ภาพรวมข้อมูลสำหรับผู้บังคับบัญชา</p></div>
+            <div id="navGrid" class="nav-grid">
+                <div class="nav-card" data-role="user,auditor,approver,admin" onclick="showSection('dashboardSection')"><i class="fas fa-chart-line"></i><h3>Dashboard</h3><p>ภาพรวมข้อมูล</p></div>
+                <div class="nav-card" data-role="user,admin" onclick="showSection('requestSection')"><i class="fas fa-file-alt"></i><h3>เสนอขอรับสิทธิ</h3><p>ยื่นคำขอรับสวัสดิการ</p></div>
+                <div class="nav-card" data-role="auditor,admin" onclick="showSection('auditSection')"><i class="fas fa-tasks"></i><h3>ตรวจสอบคำขอ</h3><p>สำหรับเจ้าหน้าที่ตรวจสอบ</p></div>
+                <div class="nav-card" data-role="approver,admin" onclick="showSection('approvalSection')"><i class="fas fa-gavel"></i><h3>อนุมัติคำขอ</h3><p>สำหรับผู้บังคับบัญชา</p></div>
+                <div class="nav-card" data-role="admin" onclick="showSection('memberSection')"><i class="fas fa-users-cog"></i><h3>จัดการสมาชิก</h3><p>กำหนดสิทธิ์ผู้ใช้งาน</p></div>
             </div>
         </div>
 
-        <div id="welfareSection" class="content-section">
-            <div class="breadcrumb"><a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a> / จัดการสิทธิและสวัสดิการ</div>
-            </div>
-        <div id="dashboardSection" class="content-section">
-            <div class="breadcrumb"><a href="#" onclick="showMainNav()"><i class="fas fa-home"></i> หน้าหลัก</a> / Dashboard</div>
-            <div class="grid" style="grid-template-columns: 1fr 1fr;"><div class="chart-container"><canvas id="monthlyRequestsChart"></canvas></div><div class="chart-container"><canvas id="lossTypeChart"></canvas></div></div>
-        </div>
+        <div id="dashboardSection" class="content-section"><h2>Dashboard</h2><p>แสดงข้อมูลภาพรวม...</p></div>
+        <div id="requestSection" class="content-section"><h2>เสนอขอรับสิทธิ</h2><p>ฟอร์มสำหรับยื่นคำขอ...</p></div>
+        <div id="auditSection" class="content-section"><h2>ตรวจสอบคำขอ</h2><p>รายการคำขอที่ต้องตรวจสอบ...</p></div>
+        <div id="approvalSection" class="content-section"><h2>อนุมัติคำขอ</h2><p>รายการคำขอที่ต้องอนุมัติ...</p></div>
 
+        <div id="memberSection" class="content-section">
+            <h2 style="margin-bottom: 20px;">จัดการสมาชิกและสิทธิ์การใช้งาน</h2>
+            <div style="overflow-x: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>ชื่อผู้ใช้</th>
+                            <th>ระดับสิทธิ์ (Role)</th>
+                            <th style="width: 120px;">การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     
     <script>
+        // --- ส่วนจัดการข้อมูล (Data Management) ---
+        const userData = [
+            { id: 1, name: 'admin', role: 'admin', fullname: 'ผู้ดูแลระบบสูงสุด' },
+            { id: 2, name: 'approver', role: 'approver', fullname: 'ผู้พัน สมศักดิ์' },
+            { id: 3, name: 'auditor', role: 'auditor', fullname: 'จ่าสิบเอก สมชาย' },
+            { id: 4, name: 'user01', role: 'user', fullname: 'สิบตรี สมหญิง' },
+            { id: 5, name: 'user02', role: 'user', fullname: 'พลทหาร สมหมาย' },
+        ];
+        const roles = {
+            'user': 'ผู้ใช้งานทั่วไป',
+            'auditor': 'ผู้ตรวจสอบ',
+            'approver': 'ผู้อนุมัติ',
+            'admin': 'ผู้ดูแลระบบ'
+        };
+        let currentUser = null;
+
         // --- ส่วนจัดการ Elements ---
         const authWrapper = document.getElementById('authWrapper');
         const mainNav = document.getElementById('mainNav');
         const contentSections = document.querySelectorAll('.content-section');
         const notification = document.getElementById('notification');
 
-        // --- ส่วนจัดการ UI ---
+        // --- ส่วนจัดการ UI & Notification ---
         function showNotification(message, type = 'success') {
             notification.textContent = message;
             notification.className = `notification ${type} show`;
             setTimeout(() => { notification.classList.remove('show'); }, 3000);
         }
 
-        // ฟังก์ชันใหม่สำหรับสลับหน้า Login/Register
-        function showAuthSection(sectionId) {
-            document.querySelectorAll('.auth-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
-
         function showSection(sectionId) {
             mainNav.classList.remove('active');
             contentSections.forEach(section => section.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         }
 
         function showMainNav() {
             contentSections.forEach(section => section.classList.remove('active'));
             mainNav.classList.add('active');
         }
-
-        function showApp() {
-            authWrapper.style.display = 'none'; // ซ่อนส่วน auth ทั้งหมด
-            mainNav.classList.add('active');
-        }
         
-        function showAuth() {
-            authWrapper.style.display = 'block'; // แสดงส่วน auth ทั้งหมด
-            showAuthSection('loginSection'); // กลับไปหน้า login เสมอ
-            mainNav.classList.remove('active');
-            contentSections.forEach(section => section.classList.remove('active'));
-        }
-
-        // --- ส่วนจัดการ Authentication ---
+        // --- ส่วนจัดการ Authentication & RBAC ---
         function login() {
-            const username = document.getElementById('username').value;
-            if (!username) {
-                showNotification('กรุณากรอกรหัสประจำตัว', 'error');
+            const username = document.getElementById('username').value.toLowerCase();
+            const user = userData.find(u => u.name === username);
+
+            if (!user) {
+                showNotification('ไม่พบชื่อผู้ใช้นี้ในระบบ', 'error');
                 return;
             }
-            document.getElementById('loggedInUserName').textContent = username;
-            showApp();
-            showNotification('เข้าสู่ระบบสำเร็จ!');
-        }
-
-        // ฟังก์ชันสมัครสมาชิก (ใหม่)
-        function register() {
-            const username = document.getElementById('regUsername').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-
-            if (!username || !password || !confirmPassword) {
-                showNotification('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
-                return;
-            }
-            if (password !== confirmPassword) {
-                showNotification('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน', 'error');
-                return;
-            }
-            // จำลองการสมัครและล็อกอินทันที
-            document.getElementById('loggedInUserName').textContent = username;
-            showApp();
-            showNotification(`สมัครสมาชิกในชื่อ ${username} สำเร็จ!`);
-        }
-
-        // ฟังก์ชันจำลองการล็อกอินด้วย Google (ใหม่)
-        function signInWithGoogle() {
-            // ในระบบจริง ส่วนนี้จะทำการ Redirect ไปยังหน้า Authentication ของ Google
-            // แต่ในตัวอย่างนี้ เราจะจำลองว่าล็อกอินสำเร็จทันที
-            const googleUserName = "ผู้ใช้ Google";
-            document.getElementById('loggedInUserName').textContent = googleUserName;
-            showApp();
-            showNotification('เข้าสู่ระบบด้วย Google สำเร็จ!');
+            currentUser = user;
+            
+            authWrapper.style.display = 'none';
+            mainNav.classList.add('active');
+            
+            document.getElementById('loggedInUserName').textContent = currentUser.fullname;
+            document.getElementById('loggedInUserRole').textContent = `สิทธิ์: ${roles[currentUser.role]}`;
+            
+            applyRBAC();
+            renderMemberTable(); // เตรียมข้อมูลในตารางจัดการสมาชิก
+            showNotification(`ยินดีต้อนรับ, ${currentUser.fullname}!`);
         }
 
         function logout() {
-            showAuth();
+            currentUser = null;
+            authWrapper.style.display = 'block';
+            mainNav.classList.remove('active');
+            contentSections.forEach(section => section.classList.remove('active'));
+            document.getElementById('username').value = '';
             showNotification('ออกจากระบบเรียบร้อยแล้ว');
         }
+        
+        function applyRBAC() {
+            const navGrid = document.getElementById('navGrid');
+            const navCards = navGrid.querySelectorAll('.nav-card');
+            
+            navCards.forEach(card => {
+                const requiredRoles = card.dataset.role.split(',');
+                if (requiredRoles.includes(currentUser.role)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
 
-        // ฟังก์ชันอื่นๆ (Dashboard, Modal, etc.) สามารถใส่ต่อจากตรงนี้ได้
-        // ...
+        // --- ส่วนจัดการสมาชิก (ใหม่) ---
+        function renderMemberTable() {
+            const tableBody = document.getElementById('memberTableBody');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+
+            userData.forEach(user => {
+                let roleOptions = '';
+                for (const roleKey in roles) {
+                    const isSelected = user.role === roleKey ? 'selected' : '';
+                    roleOptions += `<option value="${roleKey}" ${isSelected}>${roles[roleKey]}</option>`;
+                }
+
+                const row = `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.fullname} (${user.name})</td>
+                        <td>
+                            <select id="role-select-${user.id}" class="role-select" ${currentUser.role !== 'admin' || user.role === 'admin' ? 'disabled' : ''}>
+                                ${roleOptions}
+                            </select>
+                        </td>
+                        <td>
+                           <button onclick="updateUserRole(${user.id})" class="btn btn-success" 
+                                style="padding: 8px 15px;" ${currentUser.role !== 'admin' || user.role === 'admin' ? 'disabled' : ''}>
+                                <i class="fas fa-save"></i> บันทึก
+                           </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        function updateUserRole(userId) {
+            const newRole = document.getElementById(`role-select-${userId}`).value;
+            const userIndex = userData.findIndex(u => u.id === userId);
+
+            if (userIndex !== -1) {
+                userData[userIndex].role = newRole;
+                showNotification(`อัปเดตสิทธิ์ของ ${userData[userIndex].fullname} สำเร็จ!`);
+                renderMemberTable(); // Re-render เพื่ออัปเดต UI (เช่น disabled status)
+            } else {
+                showNotification('เกิดข้อผิดพลาดในการอัปเดต', 'error');
+            }
+        }
     </script>
 </body>
 </html>

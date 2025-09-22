@@ -3,255 +3,561 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการสิทธิและสวัสดิการกำลังพล</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ระบบรับรองเวลาราชการทหาร</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root {
-            --primary-start: #667eea;
-            --primary-end: #764ba2;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --bg-light: #f7fafc;
-            --border-color: #e2e8f0;
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f0f4f8;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Sarabun', sans-serif; background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); text-align: center; }
-        .header h1 { color: var(--text-dark); font-size: 2.5rem; }
-        .auth-section { display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
-        .auth-section.active { display: block; }
-        .auth-form { max-width: 400px; margin: 0 auto; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--text-dark); font-weight: 600; }
-        .form-control { width: 100%; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 16px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); color: white; width: 100%; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
-        .btn-success { background-color: #48BB78; color: white; }
-        .main-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
-        .main-nav.active { display: block; }
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .nav-card { background: linear-gradient(135deg, var(--bg-light) 0%, #edf2f7 100%); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
-        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); border-color: var(--primary-start); }
-        .nav-card i { font-size: 3rem; color: var(--primary-start); margin-bottom: 15px; }
-        .nav-card h3 { color: var(--text-dark); margin-bottom: 10px; font-size: 1.3rem; }
-        .nav-card p { color: var(--text-light); font-size: 0.9rem; }
-        .content-section { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: none; }
-        .content-section.active { display: block; }
-        .user-info { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; color: var(--text-dark); margin-bottom: 20px; }
-        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white; font-weight: 600; z-index: 1001; transform: translateX(120%); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
-        .notification.show { transform: translateX(0); opacity: 1; }
-        .notification.success { background: #48bb78; }
-        .notification.error { background: #f56565; }
-        .table { width: 100%; border-collapse: collapse; }
-        .table th, .table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        .table th { background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%); color: white; }
-        .role-select { padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .form-label {
+            @apply block text-gray-700 text-sm font-bold mb-2;
+        }
+        .form-input {
+            @apply shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+        }
+        .btn {
+            @apply font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out;
+        }
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white;
+        }
+        .btn-secondary {
+            @apply bg-gray-500 hover:bg-gray-600 text-white;
+        }
+        .btn-danger {
+            @apply bg-red-600 hover:bg-red-700 text-white;
+        }
+        .status-badge {
+            @apply px-2.5 py-0.5 rounded-full text-xs font-semibold;
+        }
+        .status-received { @apply bg-blue-100 text-blue-800; }
+        .status-processing { @apply bg-yellow-100 text-yellow-800; }
+        .status-revision { @apply bg-orange-100 text-orange-800; }
+        .status-completed { @apply bg-green-100 text-green-800; }
+        
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
-<body>
-    <div id="notification" class="notification"></div>
+<body class="antialiased">
 
-    <div class="container">
-        <div class="header"><h1><i class="fas fa-shield-alt"></i> ระบบจัดการสิทธิและสวัสดิการกำลังพล</h1></div>
-
-        <div id="authWrapper">
-            <div id="loginSection" class="auth-section active">
-                <div class="auth-form">
-                    <h2 style="text-align: center; margin-bottom: 20px; color: var(--text-dark);"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</h2>
-                    <div class="form-group">
-                        <label>ชื่อผู้ใช้ (ทดสอบ: admin, approver, auditor, user01)</label>
-                        <input type="text" id="username" class="form-control" placeholder="กรอกชื่อผู้ใช้">
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน</label>
-                        <input type="password" id="password" class="form-control" value="1234">
-                    </div>
-                    <button onclick="login()" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="mainNav" class="main-nav">
-            <div class="user-info">
-                <div class="user-avatar"><i class="fas fa-user-shield"></i></div>
-                <div>
-                    <div id="loggedInUserName" style="font-weight: 600;"></div>
-                    <div id="loggedInUserRole" style="opacity: 0.8; font-size: 0.9rem;"></div>
-                </div>
-                <button onclick="logout()" class="btn" style="margin-left: auto; background: #fff; border: 1px solid var(--border-color);"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
-            </div>
-            <div id="navGrid" class="nav-grid">
-                <div class="nav-card" data-role="user,auditor,approver,admin" onclick="showSection('dashboardSection')"><i class="fas fa-chart-line"></i><h3>Dashboard</h3><p>ภาพรวมข้อมูล</p></div>
-                <div class="nav-card" data-role="user,admin" onclick="showSection('requestSection')"><i class="fas fa-file-alt"></i><h3>เสนอขอรับสิทธิ</h3><p>ยื่นคำขอรับสวัสดิการ</p></div>
-                <div class="nav-card" data-role="auditor,admin" onclick="showSection('auditSection')"><i class="fas fa-tasks"></i><h3>ตรวจสอบคำขอ</h3><p>สำหรับเจ้าหน้าที่ตรวจสอบ</p></div>
-                <div class="nav-card" data-role="approver,admin" onclick="showSection('approvalSection')"><i class="fas fa-gavel"></i><h3>อนุมัติคำขอ</h3><p>สำหรับผู้บังคับบัญชา</p></div>
-                <div class="nav-card" data-role="admin" onclick="showSection('memberSection')"><i class="fas fa-users-cog"></i><h3>จัดการสมาชิก</h3><p>กำหนดสิทธิ์ผู้ใช้งาน</p></div>
-            </div>
-        </div>
-
-        <div id="dashboardSection" class="content-section"><h2>Dashboard</h2><p>แสดงข้อมูลภาพรวม...</p></div>
-        <div id="requestSection" class="content-section"><h2>เสนอขอรับสิทธิ</h2><p>ฟอร์มสำหรับยื่นคำขอ...</p></div>
-        <div id="auditSection" class="content-section"><h2>ตรวจสอบคำขอ</h2><p>รายการคำขอที่ต้องตรวจสอบ...</p></div>
-        <div id="approvalSection" class="content-section"><h2>อนุมัติคำขอ</h2><p>รายการคำขอที่ต้องอนุมัติ...</p></div>
-
-        <div id="memberSection" class="content-section">
-            <h2 style="margin-bottom: 20px;">จัดการสมาชิกและสิทธิ์การใช้งาน</h2>
-            <div style="overflow-x: auto;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>รหัส</th>
-                            <th>ชื่อผู้ใช้</th>
-                            <th>ระดับสิทธิ์ (Role)</th>
-                            <th style="width: 120px;">การจัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="memberTableBody">
-                        </tbody>
-                </table>
-            </div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="text-center">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p class="mt-4">กำลังประมวลผล...</p>
         </div>
     </div>
     
-    <script>
-        // --- ส่วนจัดการข้อมูล (Data Management) ---
-        const userData = [
-            { id: 1, name: 'admin', role: 'admin', fullname: 'ผู้ดูแลระบบสูงสุด' },
-            { id: 2, name: 'approver', role: 'approver', fullname: 'ผู้พัน สมศักดิ์' },
-            { id: 3, name: 'auditor', role: 'auditor', fullname: 'จ่าสิบเอก สมชาย' },
-            { id: 4, name: 'user01', role: 'user', fullname: 'สิบตรี สมหญิง' },
-            { id: 5, name: 'user02', role: 'user', fullname: 'พลทหาร สมหมาย' },
-        ];
-        const roles = {
-            'user': 'ผู้ใช้งานทั่วไป',
-            'auditor': 'ผู้ตรวจสอบ',
-            'approver': 'ผู้อนุมัติ',
-            'admin': 'ผู้ดูแลระบบ'
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <header class="bg-white shadow-md rounded-xl p-6 mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">ระบบรับรองเวลาราชการทหาร</h1>
+                <p class="text-gray-500">สำหรับจัดการและติดตามเอกสาร</p>
+            </div>
+            <div id="auth-container">
+                <!-- Auth content will be injected by JS -->
+            </div>
+        </header>
+
+        <!-- Login Section -->
+        <main id="login-section" class="bg-white p-8 rounded-xl shadow-md max-w-md mx-auto hidden">
+            <h2 class="text-2xl font-bold text-center mb-6">กรุณาเข้าสู่ระบบ</h2>
+            <button id="login-google-btn" class="btn bg-red-600 hover:bg-red-700 text-white w-full mb-4">
+                <i class="fab fa-google mr-2"></i> เข้าสู่ระบบด้วย Google
+            </button>
+            <p class="text-center text-gray-500 text-sm">ใช้บัญชี Gmail เพื่อเข้าถึงระบบ</p>
+        </main>
+
+        <!-- Main App Section (Authenticated users) -->
+        <main id="app-section" class="hidden">
+            <!-- Navigation Tabs -->
+            <div class="mb-6">
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select a tab</label>
+                    <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        <option selected>ยื่นคำร้องใหม่</option>
+                        <option>ติดตามสถานะ/แดชบอร์ด</option>
+                        <option>จัดการผู้ใช้งาน</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block">
+                    <nav id="main-nav" class="flex space-x-4 border-b border-gray-200" aria-label="Tabs">
+                         <a href="#" data-tab="form-tab" class="tab-link active-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-blue-600 border-blue-600">ยื่นคำร้องใหม่</a>
+                         <a href="#" data-tab="dashboard-tab" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">ติดตามสถานะ/แดชบอร์ด</a>
+                         <a href="#" data-tab="admin-tab" id="admin-nav-link" class="tab-link hidden whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">จัดการผู้ใช้งาน</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Form Tab -->
+            <div id="form-tab" class="tab-content">
+                <form id="request-form" class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-6 border-b pb-4">แบบฟอร์มขอหนังสือรับรองเวลาราชการ</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Personal Info -->
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 text-gray-700">ข้อมูลส่วนตัว</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="form-label" for="citizenId">เลขบัตรประชาชน</label>
+                                    <input class="form-input" id="citizenId" type="text" placeholder="xxxxxxxxxxxxx" required maxlength="13">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="prefix">คำนำหน้า</label>
+                                    <select id="prefix" class="form-input" required>
+                                        <option>นาย</option>
+                                        <option>นาง</option>
+                                        <option>นางสาว</option>
+                                        <option>ยศทหาร...</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-1">&nbsp;</div>
+                                <div>
+                                    <label class="form-label" for="firstName">ชื่อ</label>
+                                    <input class="form-input" id="firstName" type="text" placeholder="ชื่อจริง" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="lastName">นามสกุล</label>
+                                    <input class="form-input" id="lastName" type="text" placeholder="นามสกุล" required>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-input bg-gray-100" id="email" type="email" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Document Info -->
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4 text-gray-700">ข้อมูลหนังสือ</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label" for="originUnit">หน่วยต้นเรื่อง</label>
+                                    <input class="form-input" id="originUnit" type="text" placeholder="หน่วยงานที่ส่งเรื่อง" required>
+                                </div>
+                                 <div>
+                                    <label class="form-label" for="docNumber">เลขที่หนังสือ</label>
+                                    <input class="form-input" id="docNumber" type="text" placeholder="เลขที่อ้างอิง" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="docDate">ลงวันที่</label>
+                                    <input class="form-input" id="docDate" type="date" required>
+                                </div>
+                                <div class="md:col-span-2">
+                                     <label class="form-label">ประเภทข้าราชการ</label>
+                                     <div class="flex items-center space-x-4 mt-2">
+                                         <label><input type="radio" name="civilServantType" value="ใน กห." class="mr-2" checked> ใน กห.</label>
+                                         <label><input type="radio" name="civilServantType" value="นอก กห." class="mr-2"> นอก กห.</label>
+                                     </div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="form-label" for="remarks">หมายเหตุ</label>
+                                    <textarea class="form-input" id="remarks" rows="3" placeholder="ข้อมูลเพิ่มเติม (ถ้ามี)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- File Uploads -->
+                        <div class="md:col-span-2 mt-4">
+                            <h3 class="font-semibold text-lg mb-4 text-gray-700 border-t pt-6">เอกสารแนบ (PDF, JPG, PNG)</h3>
+                            <div id="file-upload-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- File inputs will be generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-right">
+                        <button type="submit" class="btn btn-primary w-full md:w-auto">
+                           <i class="fas fa-paper-plane mr-2"></i> ส่งเรื่อง
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content hidden">
+                 <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-inbox"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500">เรื่องทั้งหมด</p>
+                            <p id="stat-total" class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-yellow-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-tasks"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500">กำลังดำเนินการ</p>
+                            <p id="stat-processing" class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                     <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-edit"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500">ต้องแก้ไข</p>
+                            <p id="stat-revision" class="text-2xl font-bold">0</p>
+                        </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-green-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-check-circle"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500">เสร็จสิ้น</p>
+                            <p id="stat-completed" class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                     <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                        <div class="relative w-full md:w-1/3">
+                            <input type="text" id="search-input" placeholder="ค้นหาจากเลขที่หนังสือ, ชื่อ, สกุล..." class="form-input pl-10">
+                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <div>
+                            <button id="export-excel-btn" class="btn bg-green-600 hover:bg-green-700 text-white"><i class="fas fa-file-excel mr-2"></i>Export Excel</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">วันที่</th>
+                                    <th scope="col" class="px-6 py-3">เลขที่หนังสือ</th>
+                                    <th scope="col" class="px-6 py-3">ชื่อ-สกุล</th>
+                                    <th scope="col" class="px-6 py-3">หน่วยต้นเรื่อง</th>
+                                    <th scope="col" class="px-6 py-3">สถานะ</th>
+                                    <th scope="col" class="px-6 py-3 text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-table-body">
+                                <!-- Data rows will be injected by JS -->
+                                <tr><td colspan="6" class="text-center p-8">กำลังโหลดข้อมูล...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Tab -->
+            <div id="admin-tab" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">จัดการผู้ใช้งาน (Admin)</h2>
+                    <p class="text-gray-600">ส่วนนี้สำหรับผู้ดูแลระบบเพื่อกำหนดสิทธิ์ผู้ใช้งาน (ผู้ตรวจ, ผู้ใช้งานทั่วไป, ผู้มีอำนาจลงนาม) ซึ่งสามารถพัฒนาเพิ่มเติมโดยใช้ Firestore หรือฐานข้อมูลอื่น ๆ เพื่อเก็บข้อมูลสิทธิ์ของผู้ใช้แต่ละคน</p>
+                    <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p class="font-semibold">แนวทางการพัฒนา:</p>
+                        <ul class="list-disc list-inside mt-2 text-sm">
+                            <li>สร้าง Collection ใน Firestore ชื่อ 'users'</li>
+                            <li>เก็บข้อมูล User UID พร้อมกับ field 'role' (e.g., 'admin', 'approver', 'editor', 'viewer')</li>
+                            <li>ใน Web App, หลังจาก User ล็อกอิน ให้ดึงข้อมูล role จาก Firestore</li>
+                            <li>แสดง/ซ่อน UI หรือจำกัดการกระทำตาม role ของ User</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXbLDAviWi6HaiE22JxfLXSRYqAnyK8uI",
+            authDomain: "garuntee-army.firebaseapp.com",
+            projectId: "garuntee-army",
+            storageBucket: "garuntee-army.firebasestorage.app",
+            messagingSenderId: "802239867308",
+            appId: "1:802239867308:web:f04f44d3f0e49cf1e33209",
+            measurementId: "G-G0GHL7TY1G"
         };
+        
+        // --- IMPORTANT: REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL ---
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrXTjHBenO91btklLTR-ZoM90mK5vtN2fMkjXu2o6Ej96MXykl3P32VrGgOFbcn90/exec"; // Placeholder URL
+        const ADMIN_EMAIL = "sitti.dop@gmail.com"; // ตัวอย่างอีเมลแอดมิน
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+
+        // --- DOM Elements ---
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loginSection = document.getElementById('login-section');
+        const appSection = document.getElementById('app-section');
+        const authContainer = document.getElementById('auth-container');
+        const loginGoogleBtn = document.getElementById('login-google-btn');
+        const requestForm = document.getElementById('request-form');
+        const emailInput = document.getElementById('email');
+        const dataTableBody = document.getElementById('data-table-body');
+        const searchInput = document.getElementById('search-input');
+        
+        // --- State ---
         let currentUser = null;
+        let allData = [];
 
-        // --- ส่วนจัดการ Elements ---
-        const authWrapper = document.getElementById('authWrapper');
-        const mainNav = document.getElementById('mainNav');
-        const contentSections = document.querySelectorAll('.content-section');
-        const notification = document.getElementById('notification');
+        // --- File Definitions ---
+        const requiredFiles = [
+            { id: 'idCard', label: 'สำเนาบัตรประชาชน' },
+            { id: 'officerCard', label: 'สำเนาบัตรข้าราชการ' },
+            { id: 'studentOrder', label: 'คำสั่งบรรจุเป็นนักเรียน' },
+            { id: 'recruitOrder', label: 'คำสั่งบรรจุเข้ารับราชการ' },
+            { id: 'dischargeOrder', label: 'คำสั่งให้ออกจากราชการ' },
+            { id: 'releaseOrder', label: 'คำสั่งให้พ้น' },
+            { id: 'transferOrder', label: 'คำสั่งรับโอน' },
+            { id: 'moveOrder', label: 'คำสั่งปรับย้าย' },
+            { id: 'serviceHistory', label: 'ประวัติรับราชการ' },
+            { id: 'sd3', label: 'สด.3' },
+            { id: 'sd8', label: 'สด.8' },
+            { id: 'otherDocs', label: 'เอกสารอื่นๆ' },
+        ];
 
-        // --- ส่วนจัดการ UI & Notification ---
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            setTimeout(() => { notification.classList.remove('show'); }, 3000);
+        function generateFileInputs() {
+            const container = document.getElementById('file-upload-container');
+            container.innerHTML = requiredFiles.map(file => `
+                <div class="mb-2">
+                    <label class="form-label text-sm">${file.label}</label>
+                    <input type="file" id="${file.id}" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" multiple>
+                </div>
+            `).join('');
         }
 
-        function showSection(sectionId) {
-            mainNav.classList.remove('active');
-            contentSections.forEach(section => section.classList.remove('active'));
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
+        // --- Authentication Logic ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loginSection.classList.add('hidden');
+                appSection.classList.remove('hidden');
+                emailInput.value = user.email;
+                updateAuthUI(user);
+                fetchData();
+                checkAdminRole(user);
+            } else {
+                currentUser = null;
+                loginSection.classList.remove('hidden');
+                appSection.classList.add('hidden');
+                updateAuthUI(null);
+            }
+        });
+        
+        const checkAdminRole = (user) => {
+            if(user.email === ADMIN_EMAIL){
+                document.getElementById('admin-nav-link').classList.remove('hidden');
             }
         }
 
-        function showMainNav() {
-            contentSections.forEach(section => section.classList.remove('active'));
-            mainNav.classList.add('active');
-        }
-        
-        // --- ส่วนจัดการ Authentication & RBAC ---
-        function login() {
-            const username = document.getElementById('username').value.toLowerCase();
-            const user = userData.find(u => u.name === username);
+        loginGoogleBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .catch((error) => console.error("Google Sign-in Error:", error));
+        });
 
-            if (!user) {
-                showNotification('ไม่พบชื่อผู้ใช้นี้ในระบบ', 'error');
+        const handleLogout = () => {
+            signOut(auth).catch((error) => console.error("Sign-out Error:", error));
+        };
+
+        const updateAuthUI = (user) => {
+            if (user) {
+                authContainer.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div>
+                            <p class="font-semibold text-right">${user.displayName || user.email}</p>
+                            <p class="text-xs text-gray-500 text-right">${user.email === ADMIN_EMAIL ? 'ผู้ดูแลระบบ' : 'ผู้ใช้งานทั่วไป'}</p>
+                        </div>
+                        <img src="${user.photoURL || 'https://placehold.co/40x40/E2E8F0/A0AEC0?text=U'}" alt="User" class="w-10 h-10 rounded-full">
+                        <button id="logout-btn" class="btn btn-danger text-sm"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            } else {
+                authContainer.innerHTML = '';
+            }
+        };
+        
+        // --- Form Submission Logic ---
+        requestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (APPS_SCRIPT_URL.includes("AKfycb")) {
+                alert("กรุณาเปลี่ยน URL ของ Google Apps Script ในไฟล์ index.html ก่อนใช้งานจริง");
                 return;
             }
-            currentUser = user;
             
-            authWrapper.style.display = 'none';
-            mainNav.classList.add('active');
+            loadingOverlay.classList.remove('hidden');
+
+            const formData = {
+                timestamp: new Date().toISOString(),
+                citizenId: document.getElementById('citizenId').value,
+                prefix: document.getElementById('prefix').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                originUnit: document.getElementById('originUnit').value,
+                docNumber: document.getElementById('docNumber').value,
+                docDate: document.getElementById('docDate').value,
+                remarks: document.getElementById('remarks').value,
+                civilServantType: document.querySelector('input[name="civilServantType"]:checked').value,
+                submittedBy: currentUser.email,
+                status: 'รับเรื่อง',
+                files: {} // Placeholder for file data
+            };
             
-            document.getElementById('loggedInUserName').textContent = currentUser.fullname;
-            document.getElementById('loggedInUserRole').textContent = `สิทธิ์: ${roles[currentUser.role]}`;
-            
-            applyRBAC();
-            renderMemberTable(); // เตรียมข้อมูลในตารางจัดการสมาชิก
-            showNotification(`ยินดีต้อนรับ, ${currentUser.fullname}!`);
-        }
+            try {
+                // Read files as Base64
+                const filePromises = requiredFiles.flatMap(fileInfo => {
+                    const input = document.getElementById(fileInfo.id);
+                    return Array.from(input.files).map(file => {
+                        return new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                                resolve({
+                                    name: `${fileInfo.id}_${file.name}`,
+                                    type: file.type,
+                                    content: reader.result.split(',')[1] // Get Base64 part
+                                });
+                            };
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        });
+                    });
+                });
+                
+                const fileData = await Promise.all(filePromises);
+                formData.files = fileData;
 
-        function logout() {
-            currentUser = null;
-            authWrapper.style.display = 'block';
-            mainNav.classList.remove('active');
-            contentSections.forEach(section => section.classList.remove('active'));
-            document.getElementById('username').value = '';
-            showNotification('ออกจากระบบเรียบร้อยแล้ว');
-        }
-        
-        function applyRBAC() {
-            const navGrid = document.getElementById('navGrid');
-            const navCards = navGrid.querySelectorAll('.nav-card');
-            
-            navCards.forEach(card => {
-                const requiredRoles = card.dataset.role.split(',');
-                if (requiredRoles.includes(currentUser.role)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // --- ส่วนจัดการสมาชิก (ใหม่) ---
-        function renderMemberTable() {
-            const tableBody = document.getElementById('memberTableBody');
-            if (!tableBody) return;
-            tableBody.innerHTML = '';
-
-            userData.forEach(user => {
-                let roleOptions = '';
-                for (const roleKey in roles) {
-                    const isSelected = user.role === roleKey ? 'selected' : '';
-                    roleOptions += `<option value="${roleKey}" ${isSelected}>${roles[roleKey]}</option>`;
-                }
-
-                const row = `
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.fullname} (${user.name})</td>
-                        <td>
-                            <select id="role-select-${user.id}" class="role-select" ${currentUser.role !== 'admin' || user.role === 'admin' ? 'disabled' : ''}>
-                                ${roleOptions}
-                            </select>
-                        </td>
-                        <td>
-                           <button onclick="updateUserRole(${user.id})" class="btn btn-success" 
-                                style="padding: 8px 15px;" ${currentUser.role !== 'admin' || user.role === 'admin' ? 'disabled' : ''}>
-                                <i class="fas fa-save"></i> บันทึก
-                           </button>
-                        </td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        }
-        
-        function updateUserRole(userId) {
-            const newRole = document.getElementById(`role-select-${userId}`).value;
-            const userIndex = userData.findIndex(u => u.id === userId);
-
-            if (userIndex !== -1) {
-                userData[userIndex].role = newRole;
-                showNotification(`อัปเดตสิทธิ์ของ ${userData[userIndex].fullname} สำเร็จ!`);
-                renderMemberTable(); // Re-render เพื่ออัปเดต UI (เช่น disabled status)
-            } else {
-                showNotification('เกิดข้อผิดพลาดในการอัปเดต', 'error');
+                // Send data to Google Apps Script
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Important for Apps Script POST from browser
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Since it's no-cors, we can't read the response. We assume success.
+                alert('ส่งข้อมูลสำเร็จ!');
+                requestForm.reset();
+                emailInput.value = currentUser.email; // repopulate email
+                fetchData(); // Refresh table
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error.message);
+            } finally {
+                loadingOverlay.classList.add('hidden');
             }
-        }
+        });
+        
+        // --- Data Fetching and Display ---
+        const fetchData = async () => {
+             if (APPS_SCRIPT_URL.includes("AKfycb")) {
+                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">กรุณาตั้งค่า URL ของ Google Apps Script!</td></tr>`;
+                return;
+            }
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                const data = await response.json();
+                allData = data.slice(1); // remove header row
+                renderTable(allData);
+                updateDashboard(allData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">ไม่สามารถโหลดข้อมูลได้</td></tr>`;
+            }
+        };
+        
+        const renderTable = (data) => {
+            dataTableBody.innerHTML = '';
+            if (data.length === 0) {
+                 dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8">ไม่พบข้อมูล</td></tr>`;
+                 return;
+            }
+            data.forEach(row => {
+                 const tr = document.createElement('tr');
+                 tr.className = 'bg-white border-b hover:bg-gray-50';
+                 const statusClass = getStatusClass(row.status);
+                 tr.innerHTML = `
+                    <td class="px-6 py-4">${new Date(row.timestamp).toLocaleDateString('th-TH')}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900">${row.docNumber}</td>
+                    <td class="px-6 py-4">${row.prefix}${row.firstName} ${row.lastName}</td>
+                    <td class="px-6 py-4">${row.originUnit}</td>
+                    <td class="px-6 py-4"><span class="status-badge ${statusClass}">${row.status}</span></td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-blue-600 hover:text-blue-800" title="ดูรายละเอียด"><i class="fas fa-eye"></i></button>
+                    </td>
+                 `;
+                 dataTableBody.appendChild(tr);
+            });
+        };
+        
+        const getStatusClass = (status) => {
+             switch(status) {
+                 case 'รับเรื่อง': return 'status-received';
+                 case 'กำลังดำเนินการ': return 'status-processing';
+                 case 'แก้ไขข้อมูล': return 'status-revision';
+                 case 'เสร็จสิ้น': return 'status-completed';
+                 default: return 'bg-gray-100 text-gray-800';
+             }
+        };
+
+        const updateDashboard = (data) => {
+            document.getElementById('stat-total').innerText = data.length;
+            document.getElementById('stat-processing').innerText = data.filter(d => d.status === 'กำลังดำเนินการ').length;
+            document.getElementById('stat-revision').innerText = data.filter(d => d.status === 'แก้ไขข้อมูล').length;
+            document.getElementById('stat-completed').innerText = data.filter(d => d.status === 'เสร็จสิ้น').length;
+        };
+
+        // --- Search and Filter ---
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredData = allData.filter(row => 
+                row.docNumber.toLowerCase().includes(searchTerm) ||
+                row.firstName.toLowerCase().includes(searchTerm) ||
+                row.lastName.toLowerCase().includes(searchTerm)
+            );
+            renderTable(filteredData);
+        });
+
+        // --- Tab Navigation ---
+        document.getElementById('main-nav').addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab-link')) {
+                e.preventDefault();
+                // Update active link
+                document.querySelectorAll('.tab-link').forEach(link => {
+                    link.classList.remove('active-tab', 'text-blue-600', 'border-blue-600');
+                    link.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                });
+                e.target.classList.add('active-tab', 'text-blue-600', 'border-blue-600');
+                e.target.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+
+                // Update content
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+                document.getElementById(e.target.dataset.tab).classList.remove('hidden');
+            }
+        });
+
+        // --- Initial Load ---
+        generateFileInputs();
     </script>
 </body>
 </html>

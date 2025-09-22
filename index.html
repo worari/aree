@@ -79,7 +79,7 @@
         </header>
 
         <!-- Login Section -->
-        <main id="login-section" class="bg-white p-8 rounded-xl shadow-md max-w-md mx-auto hidden">
+        <main id="login-section" class="bg-white p-8 rounded-xl shadow-md max-w-md mx-auto">
             <h2 class="text-2xl font-bold text-center mb-6">กรุณาเข้าสู่ระบบ</h2>
             <button id="login-google-btn" class="btn bg-red-600 hover:bg-red-700 text-white w-full mb-4">
                 <i class="fab fa-google mr-2"></i> เข้าสู่ระบบด้วย Google
@@ -211,11 +211,13 @@
                             <p id="stat-processing" class="text-2xl font-bold">0</p>
                         </div>
                     </div>
-                     <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-edit"></i></div>
+                     <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
+                        <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-edit"></i></div>
                         <div>
                             <p class="text-sm text-gray-500">ต้องแก้ไข</p>
                             <p id="stat-revision" class="text-2xl font-bold">0</p>
                         </div>
+                     </div>
                      <div class="bg-white p-6 rounded-xl shadow-md flex items-center">
                         <div class="bg-green-500 text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"><i class="fas fa-check-circle"></i></div>
                         <div>
@@ -369,7 +371,20 @@
 
         loginGoogleBtn.addEventListener('click', () => {
             signInWithPopup(auth, provider)
-                .catch((error) => console.error("Google Sign-in Error:", error));
+                .catch((error) => {
+                    console.error("Google Sign-in Error:", error);
+                    // Provide user-friendly feedback based on common errors
+                    if (error.code === 'auth/popup-blocked') {
+                        alert('เบราว์เซอร์ของคุณบล็อกหน้าต่างป๊อปอัป กรุณาอนุญาตป๊อปอัปสำหรับเว็บไซต์นี้แล้วลองอีกครั้ง');
+                    } else if (error.code === 'auth/popup-closed-by-user') {
+                        // User closed the popup, no alert needed, just log it.
+                        console.log('Login popup was closed by the user.');
+                    } else if (error.code === 'auth/unauthorized-domain') {
+                        alert('โดเมนนี้ไม่ได้รับอนุญาตให้ใช้สำหรับเข้าสู่ระบบ กรุณาตรวจสอบการตั้งค่าใน Firebase Console');
+                    } else {
+                        alert('เกิดข้อผิดพลาดในการเข้าสู่ระบบ: ' + error.message);
+                    }
+                });
         });
 
         const handleLogout = () => {
@@ -397,11 +412,6 @@
         // --- Form Submission Logic ---
         requestForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (APPS_SCRIPT_URL.includes("AKfycb")) {
-                alert("กรุณาเปลี่ยน URL ของ Google Apps Script ในไฟล์ index.html ก่อนใช้งานจริง");
-                return;
-            }
-            
             loadingOverlay.classList.remove('hidden');
 
             const formData = {
@@ -470,19 +480,25 @@
         
         // --- Data Fetching and Display ---
         const fetchData = async () => {
-             if (APPS_SCRIPT_URL.includes("AKfycb")) {
-                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">กรุณาตั้งค่า URL ของ Google Apps Script!</td></tr>`;
+             if (APPS_SCRIPT_URL.includes("macros/s/AKfycb")) {
+                 // It's a valid URL, proceed to fetch
+             } else {
+                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">กรุณาตั้งค่า URL ของ Google Apps Script ให้ถูกต้อง!</td></tr>`;
                 return;
-            }
+             }
+
             try {
                 const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
-                allData = data.slice(1); // remove header row
+                allData = data; // FIX: The Apps script now returns a clean JSON array of objects
                 renderTable(allData);
                 updateDashboard(allData);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">ไม่สามารถโหลดข้อมูลได้</td></tr>`;
+                dataTableBody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-red-500">ไม่สามารถโหลดข้อมูลได้ กรุณาตรวจสอบ Console (F12)</td></tr>`;
             }
         };
         
@@ -531,9 +547,9 @@
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filteredData = allData.filter(row => 
-                row.docNumber.toLowerCase().includes(searchTerm) ||
-                row.firstName.toLowerCase().includes(searchTerm) ||
-                row.lastName.toLowerCase().includes(searchTerm)
+                (row.docNumber && row.docNumber.toLowerCase().includes(searchTerm)) ||
+                (row.firstName && row.firstName.toLowerCase().includes(searchTerm)) ||
+                (row.lastName && row.lastName.toLowerCase().includes(searchTerm))
             );
             renderTable(filteredData);
         });

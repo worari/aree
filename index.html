@@ -315,6 +315,22 @@
             }
         }
         
+        /**
+         * FIX: Creates a reliable direct view link for a Google Drive image URL.
+         * @param {string} url The original Google Drive sharing URL.
+         * @returns {string} A direct image source URL.
+         */
+        function getDriveImageSrc(url) {
+            if (!url || typeof url !== 'string') return '';
+            const regex = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
+            const match = url.match(regex);
+            if (match && match[1]) {
+                return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            }
+            // Fallback for other possible URL formats
+            return url.replace("open?id=", "uc?id=");
+        }
+
         function renderReports(filter = 'all') {
             $('#reportList').empty();
             const filteredReports = localReportsCache.filter(report => {
@@ -357,7 +373,6 @@
                              <p><strong>วันที่รายงาน:</strong> ${new Date(report.createdAt).toLocaleString('th-TH')}</p>
                         </div>
 
-                        <!-- UPDATED: Display reviewer info -->
                         ${isReviewed ? `
                             <div class="my-3 border-t pt-3 text-xs text-gray-600 bg-green-50 p-2 rounded-md">
                                 <p><strong><i data-lucide="user-check" class="inline-block h-4 w-4"></i> ตรวจโดย:</strong> ${report.reviewedBy || 'N/A'}</p>
@@ -369,7 +384,11 @@
                         <div class="mt-3">
                             <h4 class="font-semibold text-sm mb-1">หลักฐาน:</h4>
                             <div class="flex flex-wrap gap-2">
-                                ${evidenceList.map(url => `<a href="${url}" target="_blank" rel="noopener noreferrer"><img src="${url.replace("open?id=", "uc?id=")}" class="thumbnail-img w-16 h-16 object-cover rounded-lg cursor-pointer border hover:opacity-75"></a>`).join('') || '<p class="text-xs text-gray-500">ไม่มีหลักฐานแนบ</p>'}
+                                <!-- FIX: Use helper function to generate correct image src -->
+                                ${evidenceList.map(url => {
+                                    const imgSrc = getDriveImageSrc(url);
+                                    return `<a href="${imgSrc}" target="_blank" rel="noopener noreferrer" class="evidence-link"><img src="${imgSrc}" class="thumbnail-img w-16 h-16 object-cover rounded-lg cursor-pointer border hover:opacity-75"></a>`;
+                                }).join('') || '<p class="text-xs text-gray-500">ไม่มีหลักฐานแนบ</p>'}
                             </div>
                         </div>
                         <div class="mt-4 border-t pt-4 space-y-2 no-print" data-role="reviewer admin">
@@ -467,7 +486,6 @@
             report.reviewed = isChecked;
             report.reviewNotes = notes;
 
-            // UPDATED: Add reviewer name and timestamp
             if (isChecked && !report.reviewedBy) {
                 report.reviewedBy = currentUser.username;
                 if(!Array.isArray(report.timeline)) report.timeline = [];
@@ -544,10 +562,10 @@
         $('.filter-btn[data-filter="all"]').removeClass('bg-gray-200 text-gray-800').addClass('bg-purple-800 text-white');
         $('#printPdfBtn').on('click', function() { window.print(); });
 
-        // FIX: Image modal viewer
-        $('#reportList').on('click', '.thumbnail-img', function(e) { 
+        // FIX: Use delegated event handler for dynamically created elements
+        $('#reportList').on('click', '.evidence-link', function(e) {
             e.preventDefault();
-            const imageUrl = $(this).attr('src'); // Use the direct image src
+            const imageUrl = $(this).attr('href'); // href now holds the correct direct link
             $('#modalImage').attr('src', imageUrl);
             $('#imageModal').removeClass('hidden');
         });
